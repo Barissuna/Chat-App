@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "897390153828",
+    "project_id": "chatapp-80722",
+    "storage_bucket": "chatapp-80722.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897390153828:android:0f264a540aa79bd68b4f71",
+        "android_client_info": {
+          "package_name": "com.barissuna.chatapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6X17c928ixC-946KPBZSGZGqGDGiuCZg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
