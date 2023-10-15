@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.barissuna.chatapp.databinding.FragmentChatBinding
 import com.barissuna.chatapp.databinding.FragmentLoginBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -22,6 +23,8 @@ class ChatFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var firestore:FirebaseFirestore
     private lateinit var auth:FirebaseAuth
+    private lateinit var adapter:ChatRecyclerAdapter
+    private var chats = arrayListOf<Chat>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +44,11 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.sendButton.setOnClickListener{
+        adapter= ChatRecyclerAdapter()
+        binding.chatRecycler.adapter=adapter
+        binding.chatRecycler.layoutManager=LinearLayoutManager(requireContext())
 
+        binding.sendButton.setOnClickListener{
             auth.currentUser?.let {
                 val user = it.email
                 val chatText=binding.chatText.text.toString()
@@ -72,12 +78,16 @@ class ChatFragment : Fragment() {
                         Toast.makeText(requireContext(),"No Messages",Toast.LENGTH_LONG).show()
                     }else{
                         val documents=value.documents
+                        chats.clear()
                         for(document in documents){
                             val text = document.get("text") as String
                             val user = document.get("user") as String
                             val chat = Chat(user,text)
+                            chats.add(chat)
+                            adapter.chats=chats
                         }
                     }
+                    adapter.notifyDataSetChanged()
                 }
             }
 

@@ -22,6 +22,12 @@ class LoginFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
+
+        val currentUser= auth.currentUser
+        if(currentUser!=null){
+            val action = LoginFragmentDirections.actionLoginFragmentToChatFragment()
+            findNavController().navigate(action)
+        }
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +43,7 @@ class LoginFragment : Fragment() {
 
         binding.signUpButton.setOnClickListener{
             auth.createUserWithEmailAndPassword(binding.emailText.text.toString(),binding.passwordText.text.toString()).addOnSuccessListener {
-                val action = LoginFragmentDirections.actionLoginFragmentToChatFragment()
-                findNavController().navigate(action)
+
             }.addOnFailureListener {
                 Toast.makeText(requireContext(),it.localizedMessage,Toast.LENGTH_LONG).show()
             }
