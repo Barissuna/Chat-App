@@ -7,8 +7,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 
 class ChatRecyclerAdapter:RecyclerView.Adapter<ChatRecyclerAdapter.ChatHolder>() {
+
+    private val VIEW_TYPE_MESSAGE_SENT=1
+    private val VIEW_TYPE_MESSAGE_RECEIVED=2
 
     class ChatHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
 
@@ -31,9 +35,29 @@ class ChatRecyclerAdapter:RecyclerView.Adapter<ChatRecyclerAdapter.ChatHolder>()
         get()= recyclerListDiffer.currentList
         set(value) = recyclerListDiffer.submitList(value)
 
+    override fun getItemViewType(position: Int): Int {
+        val chat = chats.get(position)
+
+        if(chat.user == FirebaseAuth.getInstance().currentUser?.email.toString()){
+            return VIEW_TYPE_MESSAGE_SENT
+        }else{
+            return VIEW_TYPE_MESSAGE_RECEIVED
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_row,parent,false)
-        return ChatHolder(view)
+
+        if(viewType==VIEW_TYPE_MESSAGE_RECEIVED){
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_row,parent,false)
+            return ChatHolder(view)
+
+        }else{
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_row_right,parent,false)
+            return ChatHolder(view)
+
+        }
+
+
 
     }
 
